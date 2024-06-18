@@ -5,11 +5,11 @@ import com.exo2.Exercice2.entity.Etudiant;
 import com.exo2.Exercice2.mapper.EtudiantMapper;
 import com.exo2.Exercice2.repository.EtudiantRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +18,8 @@ public class EtudiantService {
     private final EtudiantRepository etudiantRepository;
     private final EtudiantMapper etudiantMapper;
 
-    public List<EtudiantDto> findAll() {
-        return etudiantMapper.toDtos(etudiantRepository.findAll());
+    public List<EtudiantDto> findAll(Pageable pageable) {
+        return etudiantMapper.toDtos(etudiantRepository.findAll(pageable).getContent());
     }
 
     public EtudiantDto findById(Long id) {
@@ -42,7 +42,7 @@ public class EtudiantService {
                     if (Objects.nonNull(existingEtudiant.getEcole())) {
                         etudiant.setEcole(existingEtudiant.getEcole());
                     }
-                    if(Objects.nonNull(existingEtudiant.getProjets()) || existingEtudiant.getProjets().size() != 0) {
+                    if (Objects.nonNull(existingEtudiant.getProjets()) || existingEtudiant.getProjets().size() != 0) {
                         etudiant.setProjets(existingEtudiant.getProjets());
                     }
                     return etudiantMapper.toDto(etudiantRepository.save(etudiant));

@@ -18,12 +18,13 @@ public class AdresseController {
     private AdresseService adresseService;
 
     @GetMapping("/{id}")
+    @Cacheable(value = "findOneAddress", key = "#id")
     public ResponseEntity<AdresseDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(adresseService.findById(id));
     }
 
     @GetMapping
-    @Cacheable(value = "findAllPages", key = "#page-#amount")
+    @Cacheable(value = "findAllAddress", key = "#page-#amount")
     public ResponseEntity<List<AdresseDto>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int amount) {
         Pageable pageable = PageRequest.of(page, amount);
         return ResponseEntity.ok(adresseService.findAll(pageable));
